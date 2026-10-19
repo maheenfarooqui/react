@@ -1,16 +1,75 @@
-# React + Vite
+# Password Generator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A password generator built to learn **React hooks** in depth.
 
-Currently, two official plugins are available:
+**Live demo:** https://passwordgenerator-two-theta.vercel.app/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## About
 
-## React Compiler
+I built this project to understand how React hooks really work.
+Instead of only reading about them, I used each hook for a real job.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Hooks used
 
-## Expanding the ESLint configuration
+| Hook | What I used it for |
+| --- | --- |
+| `useState` | Store length, options, and the password |
+| `useCallback` | Remember the generator and copy functions |
+| `useEffect` | Make a new password when a setting changes |
+| `useRef` | Select the password text before copying |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Features
+
+- Password length from 8 to 100 characters
+- Add numbers and symbols with checkboxes
+- New password when any setting changes
+- One-click copy to clipboard
+- Responsive dark theme
+
+## Mistake I made (and fixed)
+
+I added `password` to my `useEffect` dependency array.
+After that, the password kept changing again and again, without stopping.
+
+**Why it happened:**
+1. `useEffect` runs the generator
+2. The generator sets a new password
+3. The new password changes the dependency
+4. So `useEffect` runs again, forever
+
+**The fix:** depend on the function, not on the value it sets.
+
+```js
+useEffect(() => {
+  passwordGenerator();
+}, [passwordGenerator]);
+```
+
+`passwordGenerator` only changes when the length or the options change,
+so the loop is gone.
+
+## Built with
+
+- React
+- Vite
+- Tailwind CSS
+
+## Run it locally
+
+```bash
+git clone https://github.com/maheenfarooqui/react.git
+cd "react/hooks in react"
+npm install
+npm run dev
+```
+
+## What I want to improve
+
+- Use `crypto.getRandomValues` instead of `Math.random` for stronger passwords
+- Show a "Copied!" message after clicking copy
+- Add a password strength meter
+
+## Author
+
+**Maheen Farooqui**
+GitHub: https://github.com/maheenfarooqui
